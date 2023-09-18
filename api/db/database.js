@@ -1,15 +1,15 @@
-const { MongoClient, ObjectId } = require('mongodb')
+import { MongoClient, ObjectId } from 'mongodb'
 
 const connectionInstance = null
 
-async function connectToDatabase() {
+export async function connectToDatabase() {
   if (connectionInstance) return connectionInstance
   const client = new MongoClient(process.env.MONGODB_CONNECTIONSTRING)
   const connection = await client.connect()
   return connection.db(process.env.MONGODB_DB_NAME)
 }
 
-async function getUserByCredentials(username, password) {
+export async function getUserByCredentials(username, password) {
   const client = await connectToDatabase()
   const collection = client.collection('users')
   const user = await collection.findOne({ name: username, password: password })
@@ -17,14 +17,14 @@ async function getUserByCredentials(username, password) {
   return user
 }
 
-async function saveResultToDatabase(result) {
+export async function saveResultToDatabase(result) {
   const client = await connectToDatabase()
   const collection = client.collection('results')
   const { insertedId } = await collection.insertOne(result)
   return insertedId
 }
 
-async function getResultById(id) {
+export async function getResultById(id) {
   const client = await connectToDatabase()
   const collection = client.collection('results')
   const result = await collection.findOne({ _id: new ObjectId(id) })
@@ -32,17 +32,10 @@ async function getResultById(id) {
   return result
 }
 
-async function createUser(username, password){
+export async function createUser(username, password){
   const client = await connectToDatabase()
   const collection = client.collection('users')
   const { insertedId } = await collection.insertOne({ name: username, password: password })
   if (!insertedId) return null
   return insertedId
-}
-
-module.exports = {
-  getUserByCredentials,
-  saveResultToDatabase,
-  getResultById,
-  createUser
 }

@@ -1,4 +1,4 @@
-function countCorrectAnswers(name, answers) {
+export function countCorrectAnswers(name, answers) {
     const correctAnswers = [3, 1, 0, 2]
     const totalCorrectAnswers = answers.reduce((acc, answer, index) => {
       if (answer === correctAnswers[index]) acc++
@@ -12,7 +12,4 @@ function countCorrectAnswers(name, answers) {
       totalAnswers: answers.length
     }
     return result
-  }
-  module.exports = {
-    countCorrectAnswers
   }

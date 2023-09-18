@@ -1,8 +1,8 @@
-const { verify, sign } = require('jsonwebtoken')
-const { buildResponse } = require('./utils')
-const { pbkdf2Sync } = require('crypto')
+import { verify, sign } from 'jsonwebtoken'
+import { buildResponse } from './utils.js'
+import { pbkdf2Sync } from 'crypto'
 
-function createToken(username, id) {
+export function createToken(username, id) {
   const token = sign({ username, id }, process.env.JWT_SECRET, {
     expiresIn: '24h',
     audience: 'alura-serverless'
@@ -10,7 +10,7 @@ function createToken(username, id) {
   return token
 }
 
-async function authorize(authorizationHeader) {
+export async function authorize(authorizationHeader) {
   if (!authorizationHeader) return buildResponse(401, { error: 'Missing authorization header' })
   const [scheme, token] = authorizationHeader.split(' ')
   if (scheme !== 'Bearer' || !token) return buildResponse(401, { error: 'Invalid authorization header' })
@@ -24,12 +24,6 @@ async function authorize(authorizationHeader) {
   }
 }
 
-function makeHash(data) {
+export function makeHash(data) {
   return pbkdf2Sync(data, process.env.SALT, 100000, 64, 'sha512').toString('hex')
-}
-
-module.exports = {
-  authorize,
-  makeHash,
-  createToken
 }

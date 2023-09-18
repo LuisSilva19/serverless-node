@@ -1,4 +1,4 @@
-function buildResponse(status, body, headers) {
+export function buildResponse(status, body, headers) {
     return {
       statusCode: status,
       headers: {
@@ -9,6 +9,3 @@ function buildResponse(status, body, headers) {
     }
   }
   
-  module.exports = {
-    buildResponse
-  }

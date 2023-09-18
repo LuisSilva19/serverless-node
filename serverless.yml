@@ -27,6 +27,7 @@ provider:
 plugins:
   - serverless-offline
   - serverless-dotenv-plugin
+  - serverless-esbuild
   
 functions:
   sendResponse:

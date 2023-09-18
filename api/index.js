@@ -1,8 +1,8 @@
 'use strict'
-const { authorize, createToken, makeHash } = require('./auth')
-const { getResultById, getUserByCredentials, saveResultToDatabase, createUser } = require('./db/database')
-const { buildResponse } = require('./utils')
-const { countCorrectAnswers } = require('./responses')
+import { authorize, createToken, makeHash } from './auth.js'
+import { getResultById, getUserByCredentials, saveResultToDatabase, createUser } from './db/database.js';
+import { buildResponse } from './utils.js'
+import { countCorrectAnswers } from './responses.js'
 
 function extractBody(event) {
   if (!event?.body) {
@@ -12,7 +12,7 @@ function extractBody(event) {
   return JSON.parse(event.body)
 }
 
-module.exports.login = async (event) => {
+export async function login(event) {
   const { username, password } = extractBody(event)
   const hashedPass = makeHash(password)
 
@@ -25,7 +25,7 @@ module.exports.login = async (event) => {
   return buildResponse(200, { token: createToken(username, user._id) })
 }
 
-module.exports.sendResponse = async (event) => {
+export async function sendResponse(event) {
   const authResult = await authorize(event.headers.authorization)
   if (authResult.statusCode === 401) return authResult
 
@@ -39,7 +39,7 @@ module.exports.sendResponse = async (event) => {
   })
 }
 
-module.exports.getResult = async (event) => {
+export async function getResult(event) {
   const authResult = await authorize(event.headers.authorization)
   if (authResult.statusCode === 401) return authResult
 
@@ -51,11 +51,11 @@ module.exports.getResult = async (event) => {
   return buildResponse(200, result)
 }
 
-module.exports.createUser = async (event) => {
- 
+const _createUser = async (event) => {
+
   const { username, password } = extractBody(event)
   const hashedPass = makeHash(password)
-  const insertedId = await createUser(username, hashedPass);
+  const insertedId = await createUser(username, hashedPass)
 
   if (!insertedId) {
     return buildResponse(404, { error: 'User not created' })
@@ -63,3 +63,4 @@ module.exports.createUser = async (event) => {
 
   return buildResponse(201, { id: insertedId, message: "User insert successfull" })
 }
+export { _createUser as createUser }
