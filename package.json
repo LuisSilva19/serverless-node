@@ -26,6 +26,7 @@
     "@aws-sdk/client-s3": "^3.412.0",
     "aws-sdk": "^2.1457.0",
     "jsonwebtoken": "^9.0.2",
-    "mongodb": "^6.0.0"
+    "mongodb": "^6.0.0",
+    "serverless-esbuild": "^1.48.0"
   }
 }
